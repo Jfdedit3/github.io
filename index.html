@@ -12,7 +12,7 @@
             box-sizing: border-box;
         }
 
-        /* Style global avec fond noir */
+        /* Style global avec fond noir et texte lisible */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #000; /* Fond noir */
@@ -22,259 +22,204 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* Utilise toute la hauteur de la fenêtre */
+            height: 100vh;
         }
 
-        /* En-tête avec animation d'apparition */
-        header {
-            background-color: rgba(47, 47, 47, 0.9); /* Fond semi-transparent */
+        /* Notification de bienvenue */
+        #welcomeNotification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
             color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
             text-align: center;
-            padding: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Ombre plus marquée */
-            border-radius: 15px; /* Coins arrondis */
-            animation: slideInDown 1s ease-out forwards; /* Animation d'apparition du header */
+            animation: slideDown 2s forwards;
         }
 
-        /* Animation d'apparition du titre */
-        @keyframes slideInDown {
+        @keyframes slideDown {
             0% {
-                transform: translateY(-100px);
                 opacity: 0;
+                transform: translateY(-20px);
             }
             100% {
-                transform: translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* Conteneur principal de la vidéo avec animation simplifiée */
-        .container {
+        /* Conteneur principal */
+        #content {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            justify-content: flex-start;
-            align-items: center;
-            overflow: hidden;
-            animation: fadeInContainer 1s ease-out forwards; /* Animation du conteneur */
         }
 
-        /* Animation de fondu pour le conteneur */
-        @keyframes fadeInContainer {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        /* Menu de sélection du site */
+        #siteDropdown {
+            margin: 20px;
+            text-align: center;
         }
 
-        /* Section vidéo avec animation */
-        .video-section {
-            width: 100%;
+        #siteSelector {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            font-size: 18px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #siteSelector:hover {
+            background-color: #555;
+        }
+
+        /* Section contenant l'iframe */
+        .iframe-container {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: zoomIn 1s ease-out forwards; /* Animation pour la section vidéo */
-        }
-
-        /* Animation pour la vidéo */
-        @keyframes zoomIn {
-            0% {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+            margin-top: 20px;
         }
 
         iframe {
-            width: 100%;
-            height: 90vh;
+            width: 80%;
+            height: 80vh;
             border: none;
-            border-radius: 10px; /* Coins arrondis pour l'iframe */
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-            transform: translateZ(0); /* Optimisation de performance */
-            transition: transform 0.2s ease-out; /* Transition fluide */
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        iframe:hover {
-            transform: scale(1.03) translateY(-5px); /* Effet léger au survol pour simuler un flottement */
-        }
-
-        /* Footer avec animation d'apparition, sans délai, pour être synchronisé avec le reste */
+        /* Bouton d'information */
         footer {
             text-align: center;
-            font-size: 14px;
-            color: #ccc;
-            padding: 15px;
-            background-color: #2f2f2f;
-            width: 100%;
-            border-radius: 15px; /* Coins arrondis */
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            animation: fadeInFooter 1s ease-out forwards; /* Animation d'apparition du footer */
+            margin-top: 20px;
         }
 
-        /* Animation de fondu pour le footer */
-        @keyframes fadeInFooter {
+        #infoButton {
+            padding: 10px 20px;
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #infoButton:hover {
+            background-color: #666;
+        }
+
+        /* Fenêtre d'information */
+        .info-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s forwards;
+        }
+
+        #closeInfoButton {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        #closeInfoButton:hover {
+            background-color: #d32f2f;
+        }
+
+        @keyframes fadeIn {
             0% {
                 opacity: 0;
-                transform: translateY(30px);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
-
-        footer:hover {
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4); /* Ombre plus marquée au survol */
-            transform: translateY(-5px); /* Légère élévation au survol */
-        }
-
-        /* Responsivité */
-        @media (max-width: 768px) {
-            iframe {
-                height: 60vh; /* Moins de hauteur sur petits écrans */
-            }
-
-            header {
-                font-size: 24px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-        }
-
-        /* Style du bouton info */
-        .info-btn {
-            background-color: #4CAF50; /* Vert */
-            color: white;
-            font-size: 16px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .info-btn:hover {
-            background-color: #45a049;
-            transform: scale(1.1); /* Zoom léger */
-        }
-
-        /* Style de la notification */
-        .notification {
-            background-color: #333;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 18px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Dropdown pour sélectionner l'anime */
-        select {
-            background-color: #333;
-            color: white;
-            font-size: 16px;
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            margin: 20px 0;
-            cursor: pointer;
-            width: 50%;
-        }
-
     </style>
 </head>
 <body>
 
     <!-- Notification de bienvenue -->
-    <div class="notification" id="welcomeNotification">
-        Bienvenue sur Mugiwara No Streaming !
+    <div id="welcomeNotification">
+        <p>Bienvenue sur <strong>Mugiwara No Streaming</strong> !</p>
     </div>
 
-    <!-- Contenu principal du site -->
-    <header>
-        Mugiwara No Streaming
-    </header>
+    <!-- Contenu principal -->
+    <div id="content">
+        <header>
+            <div id="siteDropdown">
+                <select id="siteSelector" onchange="changeSite()">
+                    <option value="mugiwara" selected>Mugiwara No Streaming</option>
+                    <option value="anotherSite">Autre Site</option>
+                </select>
+            </div>
+        </header>
 
-    <div class="container">
-        <!-- Sélectionner l'anime -->
-        <label for="animeSelect" style="font-size: 18px;">Choisir un anime :</label>
-        <select id="animeSelect" onchange="changeAnime()">
-            <option value="">Sélectionnez un anime</option>
-            <option value="Naruto">Naruto</option>
-            <option value="One Piece">One Piece</option>
-            <option value="Bleach">Bleach</option>
-            <option value="Attack on Titan">Attack on Titan</option>
-        </select>
+        <main>
+            <div class="iframe-container">
+                <iframe id="siteIframe" src="https://www.mugiwara-no-streaming.com/Home?anime=Naruto" title="Anime Streaming" allowfullscreen></iframe>
+            </div>
+        </main>
 
-        <!-- Section vidéo avec animation -->
-        <div class="video-section">
-            <iframe id="animeIframe" src="" title="Vidéo de Mugiwara No Streaming" allowfullscreen="true" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+        <footer>
+            <button id="infoButton" onclick="toggleInfo()">Info</button>
+        </footer>
+
+        <!-- Fenêtre d'information -->
+        <div id="infoWindow" class="info-window">
+            <button id="closeInfoButton" onclick="closeInfo()">X</button>
+            <h2>Informations sur le site</h2>
+            <p><strong>Mugiwara No Streaming</strong> propose des animés en VF et VOSTFR. Il offre une large gamme d'animés récents et classiques, disponibles gratuitement.</p>
         </div>
-
-        <!-- Bouton info -->
-        <button class="info-btn" onclick="showInfo()">Informations</button>
-    </div>
-
-    <footer>
-        &copy; 2024 Mugiwara No Streaming - Tous droits réservés
-    </footer>
-
-    <!-- Fenêtre d'information -->
-    <div id="infoWindow" style="display: none; position: fixed; top: 30%; left: 50%; transform: translateX(-50%); background-color: #fff; color: #333; padding: 20px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); width: 80%; z-index: 2000;">
-        <h2 style="font-size: 24px; font-weight: bold; text-align: center;">Informations sur le site</h2>
-        <p style="font-size: 16px;">Mugiwara No Streaming vous permet de regarder vos animes préférés en streaming gratuitement et en haute qualité avec des sous-titres en VOSTFR.</p>
-        <p>Assurez-vous d'avoir une bonne connexion internet pour profiter de la meilleure expérience.</p>
-        <button onclick="closeInfo()" style="padding: 10px 20px; background-color: #f44336; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">Fermer</button>
     </div>
 
     <script>
-        // Afficher la notification de bienvenue
-        window.onload = function() {
-            setTimeout(function() {
-                document.getElementById('welcomeNotification').style.display = 'block';
-            }, 500); // Affiche après un délai de 500ms
-        };
-
-        // Fonction pour afficher la fenêtre d'information
-        function showInfo() {
-            document.getElementById('infoWindow').style.display = 'block';
-        }
-
-        // Fonction pour fermer la fenêtre d'information
-        function closeInfo() {
-            document.getElementById('infoWindow').style.display = 'none';
-        }
-
-        // Fonction pour changer l'anime dans l'iframe
-        function changeAnime() {
-            const animeSelect = document.getElementById('animeSelect');
-            const animeIframe = document.getElementById('animeIframe');
-            const selectedAnime = animeSelect.value;
-
-            if (selectedAnime) {
-                const url = `https://www.mugiwara-no-streaming.com/Home?anime=${encodeURIComponent(selectedAnime)}`;
-                animeIframe.src = url;
+        function changeSite() {
+            const site = document.getElementById('siteSelector').value;
+            let url = "";
+            if (site === "mugiwara") {
+                url = "https://www.mugiwara-no-streaming.com/Home?anime=Naruto";
             } else {
-                animeIframe.src = ""; // L'iframe reste vide si aucun anime n'est sélectionné
+                url = "https://another-site.com"; // Remplacez par l'URL de l'autre site
             }
+            document.getElementById('siteIframe').src = url;
+        }
+
+        function toggleInfo() {
+            const infoWindow = document.getElementById('infoWindow');
+            if (infoWindow.style.display === "block") {
+                infoWindow.style.display = "none";
+            } else {
+                infoWindow.style.display = "block";
+            }
+        }
+
+        function closeInfo() {
+            const infoWindow = document.getElementById('infoWindow');
+            infoWindow.style.display = "none";
         }
     </script>
 
