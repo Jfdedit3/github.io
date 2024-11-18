@@ -3,224 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mugiwara No Streaming</title>
+    <title>Choisir un Site</title>
     <style>
-        /* Réinitialisation du style par défaut */
+        /* Réinitialisation du style */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Style global avec fond noir et texte lisible */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000; /* Fond noir */
+            font-family: Arial, sans-serif;
+            background-color: #000;
             color: #fff;
-            overflow: hidden; /* Évite les barres de défilement */
-            margin: 0;
-            padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-        }
-
-        /* Notification de bienvenue */
-        #welcomeNotification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 18px;
-            text-align: center;
-            animation: slideDown 2s forwards;
-        }
-
-        @keyframes slideDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Conteneur principal */
-        #content {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        /* Menu de sélection du site */
-        #siteDropdown {
-            margin: 20px;
-            text-align: center;
-        }
-
-        #siteSelector {
-            padding: 10px;
-            background-color: #333;
-            color: #fff;
-            font-size: 18px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #siteSelector:hover {
-            background-color: #555;
-        }
-
-        /* Section contenant l'iframe */
-        .iframe-container {
-            flex-grow: 1;
-            display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 20px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid #444;
+            border-radius: 5px;
+            background-color: #222;
+            color: #fff;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
         }
 
         iframe {
-            width: 80%;
-            height: 80vh;
+            width: 100%;
+            height: 70vh;
             border: none;
-            border-radius: 8px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
         }
 
-        /* Bouton d'information */
+        iframe:hover {
+            transform: scale(1.05);
+        }
+
         footer {
-            text-align: center;
             margin-top: 20px;
-        }
-
-        #infoButton {
-            padding: 10px 20px;
-            background-color: #444;
-            color: #fff;
-            border: 1px solid #666;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #infoButton:hover {
-            background-color: #666;
-        }
-
-        /* Fenêtre d'information */
-        .info-window {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            display: none;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 1s forwards;
-        }
-
-        #closeInfoButton {
-            background-color: #f44336;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-        }
-
-        #closeInfoButton:hover {
-            background-color: #d32f2f;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+            color: #ccc;
         }
     </style>
 </head>
 <body>
 
-    <!-- Notification de bienvenue -->
-    <div id="welcomeNotification">
-        <p>Bienvenue sur <strong>Mugiwara No Streaming</strong> !</p>
-    </div>
-
-    <!-- Contenu principal -->
-    <div id="content">
-        <header>
-            <div id="siteDropdown">
-                <select id="siteSelector" onchange="changeSite()">
-                    <option value="mugiwara" selected>Mugiwara No Streaming</option>
-                    <option value="anotherSite">Autre Site</option>
-                </select>
-            </div>
-        </header>
-
-        <main>
-            <div class="iframe-container">
-                <iframe id="siteIframe" src="https://www.mugiwara-no-streaming.com/Home?anime=Naruto" title="Anime Streaming" allowfullscreen></iframe>
-            </div>
-        </main>
-
-        <footer>
-            <button id="infoButton" onclick="toggleInfo()">Info</button>
-        </footer>
-
-        <!-- Fenêtre d'information -->
-        <div id="infoWindow" class="info-window">
-            <button id="closeInfoButton" onclick="closeInfo()">X</button>
-            <h2>Informations sur le site</h2>
-            <p><strong>Mugiwara No Streaming</strong> propose des animés en VF et VOSTFR. Il offre une large gamme d'animés récents et classiques, disponibles gratuitement.</p>
+    <div class="container">
+        <h1>Choisissez un site à afficher</h1>
+        <input type="text" id="siteInput" placeholder="Entrez l'URL du site (ex : https://www.mugiwara-no-streaming.com)">
+        <div>
+            <iframe id="iframe" src="" frameborder="0"></iframe>
         </div>
     </div>
 
+    <footer>
+        <p>&copy; 2024 Choisir un Site - Tous droits réservés</p>
+    </footer>
+
     <script>
-        function changeSite() {
-            const site = document.getElementById('siteSelector').value;
-            let url = "";
-            if (site === "mugiwara") {
-                url = "https://www.mugiwara-no-streaming.com/Home?anime=Naruto";
-            } else {
-                url = "https://another-site.com"; // Remplacez par l'URL de l'autre site
-            }
-            document.getElementById('siteIframe').src = url;
-        }
+        const siteInput = document.getElementById("siteInput");
+        const iframe = document.getElementById("iframe");
 
-        function toggleInfo() {
-            const infoWindow = document.getElementById('infoWindow');
-            if (infoWindow.style.display === "block") {
-                infoWindow.style.display = "none";
-            } else {
-                infoWindow.style.display = "block";
+        // Lorsqu'un utilisateur tape dans le champ de texte
+        siteInput.addEventListener("input", function() {
+            const url = siteInput.value;
+            // Vérifie si l'URL contient "http" pour éviter les erreurs de chargement
+            if (url.startsWith("http")) {
+                iframe.src = url;
             }
-        }
-
-        function closeInfo() {
-            const infoWindow = document.getElementById('infoWindow');
-            infoWindow.style.display = "none";
-        }
+        });
     </script>
 
 </body>
