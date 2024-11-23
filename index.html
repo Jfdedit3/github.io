@@ -54,7 +54,7 @@
 <body>
     <div class="container">
         <h2>Bypass Link Simulation</h2>
-        <p>Entrez un code ou un lien pour continuer...</p>
+        <p>Entrez un code pour continuer...</p>
         <input type="text" id="inputCode" placeholder="Entrez votre code ici">
         <br>
         <button class="submit-btn" onclick="processLink()">Continuer</button>
@@ -67,7 +67,7 @@
             const input = document.getElementById('inputCode').value;
             const message = document.getElementById('message');
             
-            if (input === "12345") {  // Ce code est un exemple, remplacez-le par ce que vous voulez.
+            if (input === "openai") {  // Modifiez le code ici pour qu'il soit valide
                 message.style.color = 'green';
                 message.innerHTML = "Code valide. Vous êtes redirigé.";
                 setTimeout(function() {
