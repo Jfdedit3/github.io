@@ -11,35 +11,73 @@
             text-align: center;
             margin-top: 50px;
         }
-        .message {
-            font-size: 20px;
-            color: #333;
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .redirect {
-            color: #1a73e8;
-            text-decoration: none;
-            font-weight: bold;
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-        .redirect:hover {
-            text-decoration: underline;
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .message {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        <p>Vous êtes redirigé vers un lien sécurisé...</p>
-        <a href="https://www.example.com" class="redirect">Cliquez ici pour continuer</a>
+    <div class="container">
+        <h2>Bypass Link Simulation</h2>
+        <p>Entrez un code ou un lien pour continuer...</p>
+        <input type="text" id="inputCode" placeholder="Entrez votre code ici">
+        <br>
+        <button class="submit-btn" onclick="processLink()">Continuer</button>
+
+        <div class="message" id="message"></div>
     </div>
 
     <script>
-        // Simulation de la redirection automatique après un délai de 3 secondes
-        setTimeout(function() {
-            window.location.href = "https://www.example.com";
-        }, 3000); // Redirection après 3 secondes
+        function processLink() {
+            const input = document.getElementById('inputCode').value;
+            const message = document.getElementById('message');
+            
+            if (input === "12345") {  // Ce code est un exemple, remplacez-le par ce que vous voulez.
+                message.style.color = 'green';
+                message.innerHTML = "Code valide. Vous êtes redirigé.";
+                setTimeout(function() {
+                    window.location.href = "https://www.example.com"; // Remplacez par l'URL de redirection souhaitée
+                }, 2000); // 2 secondes avant la redirection
+            } else {
+                message.style.color = 'red';
+                message.innerHTML = "Code invalide. Essayez à nouveau.";
+            }
+        }
     </script>
 </body>
 </html>
