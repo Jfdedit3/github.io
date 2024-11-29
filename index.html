@@ -129,6 +129,125 @@
       transition: opacity 1s ease-out, transform 1s ease-out, box-shadow 1s ease-out;
     }
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Bypass API</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #333;
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        p, h3 {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            font-size: 1.1em;
+            margin: 10px 0;
+            padding-left: 15px;
+        }
+        ul li:before {
+            content: '✔';
+            color: #ffcc00;
+            padding-right: 10px;
+        }
+        .btn {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #fbc02d;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #333;
+            padding: 15px;
+            color: #fff;
+        }
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bypass API Documentation</h1>
+        <p>Utilisez notre API pour contourner les liens protégés. Vous pouvez tester l'outil ou explorer notre documentation ici.</p>
+    </header>
+
+    <h3>Réponses de l'API</h3>
+    <h4>Réponse réussie :</h4>
+    <pre>
+{
+  "status": "success",
+  "result": "https://..." --> lien contourné
+}
+    </pre>
+
+    <h4>Réponse échouée :</h4>
+    <pre>
+{
+  "status": "error",
+  "message": "Erreur lors de l'appel API"
+}
+    </pre>
+
+    <h3>Sites Supportés</h3>
+    <ul>
+        <li>linkvertise.com (et autres domaines)</li>
+        <li>paster.so</li>
+        <li>Admaven (Lootlinks/lootlabs)</li>
+        <li>work.ink</li>
+        <li>boost.ink</li>
+        <li>mboost.me (bst.gg/booo.st)</li>
+        <li>socialwolvez.com</li>
+        <li>sub2get.com</li>
+        <li>social-unlock.com</li>
+        <li>sub2unlock.com</li>
+        <li>sub2unlock.net</li>
+        <li>rekonise.com</li>
+        <li>adfoc.us</li>
+        <li>URL shorteners (bit.ly, wc.wtf, v.gd, etc.)</li>
+    </ul>
+
+    <button class="btn" onclick="window.location.href='bypass.html'">Accéder à l'Outil Bypass</button>
+
+    <footer>
+        <p>Rejoignez-nous sur <a href="https://bypass.vip/discord" target="_blank">Discord</a> pour plus d'infos.</p>
+    </footer>
+</body>
+</html>
     .iframe-container.loaded {
       opacity: 1;
       transform: scale(1);
@@ -171,35 +290,7 @@
       0% {
         opacity: 0;
       }
-      100% {
-        opacity: 1;
-      }
-    }
 
-  </style>
-</head>
-<body>
-
-  <!-- Menu de préchargement avec animation de couleur et effet parallax -->
-  <div class="preload-menu" id="preload-menu">
-    <div class="preload-message">
-      Chargement en cours...<br>Veuillez patienter.
-    </div>
-  </div>
-
-  <!-- Conteneur de l'iframe -->
-  <div class="iframe-container" id="iframe-container">
-    <!-- Message d'erreur si l'iframe échoue -->
-    <div class="error-message" id="error-message">Erreur de chargement du site</div>
-
-    <!-- L'iframe avec lazy loading -->
-    <iframe class="responsive-iframe" src="https://z4trox.tiiny.site" allowfullscreen title="Site intégré" loading="lazy" onload="onIframeLoad(this)" onerror="onIframeError(this)"></iframe>
-  </div>
-
-  <script>
-    // Fonction pour retirer le menu de préchargement et afficher l'iframe avec animation
-    function onIframeLoad(iframe) {
-      const container = iframe.closest('.iframe-container');
       const loader = document.getElementById('preload-menu');
       
       // Cache le menu de préchargement après 5 secondes de délai
