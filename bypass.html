@@ -133,7 +133,7 @@
             document.getElementById("response").innerHTML = "";
 
             // Appel API pour bypasser le lien
-            fetch(`https://api.bypass.vip/bypass?url=${encodeURIComponent(url)}`)
+            fetch(`https://bypass.city/bypass?bypass=${encodeURIComponent(url)}`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("loading").style.display = "none";
