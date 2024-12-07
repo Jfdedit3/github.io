@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Lecteur vidéo via iframe - Interface améliorée avec Autoplay et boucle</title>
+    <title>Lecteur vidéo via iframe - Interface améliorée avec effets futuristes</title>
     <style>
         /* Styles de la page */
         body {
@@ -23,7 +23,7 @@
             border-radius: 20px;
             box-shadow: 0 0 50px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(0, 255, 255, 0.4);
             overflow: hidden;
-            animation: neon-border 2s infinite alternate;
+            animation: neon-border 2s infinite alternate, slide-in 1s ease-in-out;
         }
 
         /* Animation de la bordure de néon */
@@ -33,6 +33,16 @@
             }
             to {
                 box-shadow: 0 0 50px rgba(0, 255, 255, 0.8), inset 0 0 25px rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        /* Animation de la glissade pour l'iframe */
+        @keyframes slide-in {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
             }
         }
 
@@ -80,6 +90,26 @@
                 opacity: 0;
             }
         }
+
+        /* Effets de scintillement futuriste */
+        .scintillation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            animation: glowing 1s infinite alternate;
+        }
+
+        @keyframes glowing {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 70px rgba(0, 255, 255, 0.8);
+            }
+        }
     </style>
 </head>
 <body>
@@ -93,6 +123,7 @@
             <div class="particle" style="left: 80%; animation-delay: 3s;"></div>
             <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
         </div>
+        <div class="scintillation"></div>
     </div>
 </body>
 </html>
