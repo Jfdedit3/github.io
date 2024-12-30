@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Lecteur vidéo via iframe - Interface améliorée avec effets futuristes</title>
+    <title>Lecteur vidéo avec préchargement - Interface améliorée avec effets futuristes</title>
     <style>
         /* Styles de la page */
         body {
@@ -15,8 +15,8 @@
             overflow: hidden;
         }
 
-        /* Conteneur principal de l'iframe */
-        .iframe-container {
+        /* Conteneur principal de la vidéo */
+        .video-container {
             width: 80%;
             max-width: 900px;
             aspect-ratio: 16/9;
@@ -36,7 +36,7 @@
             }
         }
 
-        /* Animation de la glissade pour l'iframe */
+        /* Animation de la glissade pour la vidéo */
         @keyframes slide-in {
             from {
                 transform: translateX(-100%);
@@ -46,17 +46,16 @@
             }
         }
 
-        /* Styles de l'iframe */
-        iframe {
+        /* Styles de la vidéo */
+        video {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 20px;
             transition: all 0.3s ease; /* Smooth hover effect */
-            allow="autoplay; fullscreen; loop";
         }
 
-        iframe:hover {
+        video:hover {
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.4);
         }
 
@@ -114,8 +113,8 @@
     </style>
 </head>
 <body>
-    <div class="iframe-container">
-        <iframe src="https://files.catbox.moe/70s0kh.mp4" frameborder="0" allow="autoplay; fullscreen; loop" allowfullscreen></iframe>
+    <div class="video-container">
+        <video src="https://files.catbox.moe/70s0kh.mp4" preload="auto" controls autoplay loop></video>
         <div class="particles">
             <!-- Génération de particules -->
             <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
