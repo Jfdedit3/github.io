@@ -2,128 +2,329 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Lecteur vidéo avec préchargement - Interface améliorée avec effets futuristes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil de z4trox</title>
+    <meta name="description" content="Profil de z4trox, un utilisateur passionné par la technologie.">
     <style>
-        /* Styles de la page */
-        body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); opacity: 0.8; }
+            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); opacity: 1; }
+            100% { text-shadow: 0 0 10px rgba(255,255,255,0.5); opacity: 0.8; }
+        }
+
+        @keyframes revealMask {
+            from { 
+                clip-path: inset(0 100% 0 0);
+                opacity: 0;
+            }
+            to { 
+                clip-path: inset(0 0 0 0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rotateIn {
+            from {
+                transform: rotate(-180deg) scale(0.3);
+                opacity: 0;
+            }
+            to {
+                transform: rotate(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideFromBottom {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInBlur {
+            from {
+                opacity: 0;
+                filter: blur(20px);
+            }
+            to {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        @keyframes expandWidth {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            z-index: 1000;
+            animation: fadeOut 0.5s ease-out 2s forwards;
         }
 
-        /* Conteneur principal de la vidéo */
-        .video-container {
-            width: 80%;
-            max-width: 900px;
-            aspect-ratio: 16/9;
-            border-radius: 20px;
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(0, 255, 255, 0.4);
-            overflow: hidden;
-            animation: neon-border 2s infinite alternate, slide-in 1s ease-in-out;
+        .loader-content {
+            font-size: 2rem;
+            color: white;
+            animation: pulse 1s infinite;
         }
 
-        /* Animation de la bordure de néon */
-        @keyframes neon-border {
-            from {
-                box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.3);
-            }
+        @keyframes fadeOut {
             to {
-                box-shadow: 0 0 50px rgba(0, 255, 255, 0.8), inset 0 0 25px rgba(0, 255, 255, 0.6);
-            }
-        }
-
-        /* Animation de la glissade pour la vidéo */
-        @keyframes slide-in {
-            from {
-                transform: translateX(-100%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        /* Styles de la vidéo */
-        video {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 20px;
-            transition: all 0.3s ease; /* Smooth hover effect */
-        }
-
-        video:hover {
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), inset 0 0 10px rgba(0, 255, 255, 0.4);
-        }
-
-        /* Effets de particules */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background: rgba(0, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: particle-move 5s linear infinite;
-        }
-
-        /* Animation des particules */
-        @keyframes particle-move {
-            from {
-                transform: translateY(100vh) translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-10vh) translateX(50px);
                 opacity: 0;
+                visibility: hidden;
             }
         }
 
-        /* Effets de scintillement futuriste */
-        .scintillation {
+        @keyframes pulse {
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        .profile {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: fadeInBlur 1s ease-out 2.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            animation: glowing 1s infinite alternate;
+            height: 5px;
+            background: linear-gradient(to right, #23a6d5, #23d5ab);
+            animation: expandWidth 1s ease-out 3s both;
         }
 
-        @keyframes glowing {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.6);
+        .profile-image-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            opacity: 0;
+            animation: rotateIn 1.5s ease-out 3.2s forwards;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.5s ease;
+        }
+
+        .profile-title {
+            font-size: 3rem;
+            text-align: center;
+            background: linear-gradient(to right, #fff, #a8edea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            opacity: 0;
+            animation: revealMask 1s ease-out 3.7s forwards;
+        }
+
+        .profile-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 2rem 0;
+            line-height: 1.8;
+            text-align: center;
+            opacity: 0;
+            animation: slideFromBottom 1s ease-out 4s forwards;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-button {
+            text-decoration: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .facebook {
+            animation: slideFromBottom 0.5s ease-out 4.3s forwards;
+            background: linear-gradient(45deg, #4267B2, #5B7EC2);
+        }
+
+        .twitter {
+            animation: slideFromBottom 0.5s ease-out 4.5s forwards;
+            background: linear-gradient(45deg, #1DA1F2, #4DB5F5);
+        }
+
+        .github {
+            animation: slideFromBottom 0.5s ease-out 4.7s forwards;
+            background: linear-gradient(45deg, #333, #555);
+        }
+
+        .social-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+            z-index: 1000;
+            animation: welcomeFade 2s ease-out forwards;
+        }
+
+        @keyframes welcomeFade {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        .welcome-text {
+            opacity: 0;
+            animation: welcomeText 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes welcomeText {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .profile {
+                padding: 2rem;
+                margin: 1rem;
             }
-            50% {
-                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 70px rgba(0, 255, 255, 0.8);
+
+            .profile-title {
+                font-size: 2rem;
+            }
+
+            .profile-image-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+
+            .social-button {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <video src="https://files.catbox.moe/70s0kh.mp4" preload="auto" controls autoplay loop></video>
-        <div class="particles">
-            <!-- Génération de particules -->
-            <div class="particle" style="left: 20%; animation-delay: 0s;"></div>
-            <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
-            <div class="particle" style="left: 60%; animation-delay: 2s;"></div>
-            <div class="particle" style="left: 80%; animation-delay: 3s;"></div>
-            <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+    <div class="welcome-overlay">
+        <div class="welcome-text">Bienvenue</div>
+    </div>
+    <div class="page-loader">
+        <div class="loader-content">Chargement...</div>
+    </div>
+    <div class="profile">
+        <div class="profile-image-container">
+            <img src="https://files.catbox.moe/g6cx83.jpg" alt="Image de profil de z4trox" class="profile-image">
         </div>
-        <div class="scintillation"></div>
+        <h1 class="profile-title">z4trox</h1>
+        <p class="profile-description">
+            Passionné par la technologie et le développement web. Expert en création d'expériences numériques innovantes, 
+            toujours à la recherche de nouveaux défis pour repousser les limites du possible.
+        </p>
+        <div class="social-buttons">
+            <a href="https://www.facebook.com" class="social-button facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://twitter.com" class="social-button twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://github.com" class="social-button github" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
     </div>
 </body>
 </html>
