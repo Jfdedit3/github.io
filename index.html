@@ -4,90 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de z4trox</title>
-    <meta name="description" content="Profil de z4trox, un utilisateur passionné par la technologie.">
     <style>
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            25% { background-position: 100% 100%; }
+            50% { background-position: 50% 0%; }
+            75% { background-position: 0% 100%; }
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 30px rgba(255,255,255,0.1); }
+            50% { box-shadow: 0 0 50px rgba(255,255,255,0.2); }
+            100% { box-shadow: 0 0 30px rgba(255,255,255,0.1); }
         }
 
-        @keyframes glowText {
-            0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); opacity: 0.8; }
-            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); opacity: 1; }
-            100% { text-shadow: 0 0 10px rgba(255,255,255,0.5); opacity: 0.8; }
+        @keyframes textShine {
+            0% { background-position: -100%; }
+            100% { background-position: 200%; }
         }
 
-        @keyframes revealMask {
-            from { 
-                clip-path: inset(0 100% 0 0);
-                opacity: 0;
-            }
-            to { 
-                clip-path: inset(0 0 0 0);
-                opacity: 1;
-            }
+        @keyframes borderRotate {
+            0% { border-image-source: linear-gradient(0deg, #23a6d5, #23d5ab); }
+            25% { border-image-source: linear-gradient(90deg, #23a6d5, #23d5ab); }
+            50% { border-image-source: linear-gradient(180deg, #23a6d5, #23d5ab); }
+            75% { border-image-source: linear-gradient(270deg, #23a6d5, #23d5ab); }
+            100% { border-image-source: linear-gradient(360deg, #23a6d5, #23d5ab); }
         }
 
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        @keyframes floatingElements {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(5px, 5px); }
+            50% { transform: translate(-5px, -5px); }
+            75% { transform: translate(-5px, 5px); }
+            100% { transform: translate(0, 0); }
         }
 
-        @keyframes rotateIn {
-            from {
-                transform: rotate(-180deg) scale(0.3);
-                opacity: 0;
-            }
-            to {
-                transform: rotate(0) scale(1);
-                opacity: 1;
-            }
+        @keyframes backgroundShift {
+            0% { background-color: rgba(255, 255, 255, 0.1); }
+            50% { background-color: rgba(255, 255, 255, 0.15); }
+            100% { background-color: rgba(255, 255, 255, 0.1); }
         }
 
-        @keyframes slideFromBottom {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInBlur {
-            from {
-                opacity: 0;
-                filter: blur(20px);
-            }
-            to {
-                opacity: 1;
-                filter: blur(0);
-            }
-        }
-
-        @keyframes expandWidth {
-            from {
-                width: 0;
-                opacity: 0;
-            }
-            to {
-                width: 100%;
-                opacity: 1;
-            }
+        @keyframes particleFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
         }
 
         * {
@@ -96,50 +57,37 @@
             box-sizing: border-box;
         }
 
-        .page-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeOut 0.5s ease-out 2s forwards;
-        }
-
-        .loader-content {
-            font-size: 2rem;
-            color: white;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        @keyframes pulse {
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            animation: gradientBG 20s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
-            overflow-x: hidden;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
         }
 
         .profile {
@@ -149,67 +97,95 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: fadeInBlur 1s ease-out 2.5s both;
             position: relative;
+            z-index: 2;
             overflow: hidden;
+            animation: glowPulse 3s infinite, backgroundShift 5s infinite;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #23a6d5, #23d5ab);
+            border-image-slice: 1;
         }
 
         .profile::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #23a6d5, #23d5ab);
-            animation: expandWidth 1s ease-out 3s both;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: rotateBackground 10s linear infinite;
         }
 
-        .profile-image-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 2rem;
-            opacity: 0;
-            animation: rotateIn 1.5s ease-out 3.2s forwards;
-        }
-
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            transition: transform 0.5s ease;
+        @keyframes rotateBackground {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .profile-title {
-            font-size: 3rem;
+            font-size: 3.5rem;
             text-align: center;
-            background: linear-gradient(to right, #fff, #a8edea);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #fff, #23d5ab, #fff);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            opacity: 0;
-            animation: revealMask 1s ease-out 3.7s forwards;
+            animation: textShine 5s linear infinite;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .profile-title::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: letterSpacing 8s ease infinite;
+        }
+
+        @keyframes letterSpacing {
+            0%, 100% { letter-spacing: normal; }
+            50% { letter-spacing: 5px; }
         }
 
         .profile-description {
             font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.9);
-            margin: 2rem 0;
             line-height: 1.8;
             text-align: center;
-            opacity: 0;
-            animation: slideFromBottom 1s ease-out 4s forwards;
+            margin: 2rem 0;
+            position: relative;
+            animation: floatingElements 8s ease infinite;
+        }
+
+        .profile-description::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            top: 0;
+            left: -100%;
+            animation: shine 5s infinite;
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
         }
 
         .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 2rem;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .social-button {
@@ -221,61 +197,55 @@
             letter-spacing: 1px;
             position: relative;
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            animation: floatingElements 6s ease infinite;
         }
 
-        .facebook {
-            animation: slideFromBottom 0.5s ease-out 4.3s forwards;
-            background: linear-gradient(45deg, #4267B2, #5B7EC2);
-        }
-
-        .twitter {
-            animation: slideFromBottom 0.5s ease-out 4.5s forwards;
-            background: linear-gradient(45deg, #1DA1F2, #4DB5F5);
-        }
-
-        .github {
-            animation: slideFromBottom 0.5s ease-out 4.7s forwards;
-            background: linear-gradient(45deg, #333, #555);
+        .social-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
         }
 
         .social-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            transition: all 0.3s ease;
+            transform: translateY(-5px) scale(1.1);
+            filter: brightness(1.2);
         }
 
-        .welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 3rem;
-            z-index: 1000;
-            animation: welcomeFade 2s ease-out forwards;
+        .facebook {
+            background: linear-gradient(45deg, #4267B2, #5B7EC2);
+            animation-delay: 0.2s;
         }
 
-        @keyframes welcomeFade {
-            0% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
+        .twitter {
+            background: linear-gradient(45deg, #1DA1F2, #4DB5F5);
+            animation-delay: 0.4s;
         }
 
-        .welcome-text {
-            opacity: 0;
-            animation: welcomeText 1.5s ease-out 0.5s forwards;
+        .github {
+            background: linear-gradient(45deg, #333, #555);
+            animation-delay: 0.6s;
         }
 
-        @keyframes welcomeText {
-            0% { opacity: 0; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { opacity: 1; transform: scale(1); }
+        .glow-effect {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotateGlow 10s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -285,16 +255,12 @@
             }
 
             .profile-title {
-                font-size: 2rem;
-            }
-
-            .profile-image-container {
-                width: 150px;
-                height: 150px;
+                font-size: 2.5rem;
             }
 
             .social-buttons {
                 flex-direction: column;
+                gap: 1rem;
             }
 
             .social-button {
@@ -305,17 +271,15 @@
     </style>
 </head>
 <body>
-    <div class="welcome-overlay">
-        <div class="welcome-text">Bienvenue</div>
-    </div>
-    <div class="page-loader">
-        <div class="loader-content">Chargement...</div>
+    <div class="particles">
+        <!-- Les particules seront créées en JavaScript -->
     </div>
     <div class="profile">
+        <div class="glow-effect"></div>
         <div class="profile-image-container">
             <img src="https://files.catbox.moe/g6cx83.jpg" alt="Image de profil de z4trox" class="profile-image">
         </div>
-        <h1 class="profile-title">z4trox</h1>
+        <h1 class="profile-title" data-text="z4trox">z4trox</h1>
         <p class="profile-description">
             Passionné par la technologie et le développement web. Expert en création d'expériences numériques innovantes, 
             toujours à la recherche de nouveaux défis pour repousser les limites du possible.
@@ -326,5 +290,37 @@
             <a href="https://github.com" class="social-button github" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
     </div>
+
+    <script>
+        // Création des particules
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Position aléatoire
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Taille aléatoire
+                const size = Math.random() * 3 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Durée et délai d'animation aléatoires
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+                particle.style.animation = `particleFloat ${duration}s ${delay}s linear infinite`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialisation des particules
+        createParticles();
+    </script>
 </body>
 </html>
