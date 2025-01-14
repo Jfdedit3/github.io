@@ -1,386 +1,195 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil de z4trox</title>
-  <meta name="description" content="Profil de z4trox, un utilisateur passionné par la technologie.">
-  <style>
-    @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter le Bot Discord</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #7289da;
+            --secondary: #2c2f33;
+            --accent: #99aab5;
+            --neon: #00fff2;
+        }
 
-      50% {
-        background-position: 100% 50%;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
 
-    @keyframes float {
-      0% {
-        transform: translateY(0px) rotate(0deg);
-      }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-      50% {
-        transform: translateY(-15px) rotate(2deg);
-      }
+        .container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(114, 137, 218, 0.3),
+                        inset 0 0 15px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            animation: containerFloat 3s ease-in-out infinite;
+        }
 
-      100% {
-        transform: translateY(0px) rotate(0deg);
-      }
-    }
+        @keyframes containerFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-    @keyframes glowText {
-      0% {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        opacity: 0.8;
-      }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(114, 137, 218, 0.5);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
 
-      50% {
-        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-        opacity: 1;
-      }
+        @keyframes titleGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
 
-      100% {
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        opacity: 0.8;
-      }
-    }
+        .button {
+            background: linear-gradient(45deg, var(--primary), var(--neon));
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(114, 137, 218, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
 
-    @keyframes revealMask {
-      from {
-        clip-path: inset(0 100% 0 0);
-        opacity: 0;
-      }
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
 
-      to {
-        clip-path: inset(0 0 0 0);
-        opacity: 1;
-      }
-    }
+        .button:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 0 30px rgba(114, 137, 218, 0.6);
+        }
 
-    @keyframes scaleIn {
-      from {
-        transform: scale(0.5);
-        opacity: 0;
-      }
+        .button:hover::before {
+            left: 100%;
+        }
 
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
 
-    @keyframes rotateIn {
-      from {
-        transform: rotate(-180deg) scale(0.3);
-        opacity: 0;
-      }
+            h1 {
+                font-size: 1.8em;
+            }
 
-      to {
-        transform: rotate(0) scale(1);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideFromBottom {
-      from {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeInBlur {
-      from {
-        opacity: 0;
-        filter: blur(20px);
-      }
-
-      to {
-        opacity: 1;
-        filter: blur(0);
-      }
-    }
-
-    @keyframes expandWidth {
-      from {
-        width: 0;
-        opacity: 0;
-      }
-
-      to {
-        width: 100%;
-        opacity: 1;
-      }
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    .page-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(-45deg, #ee7752, #e73c7e);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeOut 0.5s ease-out 2s forwards;
-    }
-
-    .loader-content {
-      font-size: 2rem;
-      color: white;
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    @keyframes pulse {
-      50% {
-        transform: scale(1.1);
-      }
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      overflow-x: hidden;
-    }
-
-    .profile {
-      max-width: 800px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 3rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      animation: fadeInBlur 1s ease-out 2.5s both;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .profile::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(to right, #23a6d5, #23d5ab);
-      animation: expandWidth 1s ease-out 3s both;
-    }
-
-    .profile-image-container {
-      position: relative;
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 2rem;
-      opacity: 0;
-      animation: rotateIn 1.5s ease-out 3.2s forwards;
-    }
-
-    .profile-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      transition: transform 0.5s ease;
-    }
-
-    .profile-title {
-      font-size: 3rem;
-      text-align: center;
-      background: linear-gradient(to right, #fff, #a8edea);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      opacity: 0;
-      animation: revealMask 1s ease-out 3.7s forwards;
-    }
-
-    .profile-description {
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.9);
-      margin: 2rem 0;
-      line-height: 1.8;
-      text-align: center;
-      opacity: 0;
-      animation: slideFromBottom 1s ease-out 4s forwards;
-    }
-
-    .social-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .social-button {
-      text-decoration: none;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      position: relative;
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-
-    .facebook {
-      animation: slideFromBottom 0.5s ease-out 4.3s forwards;
-      background: linear-gradient(45deg, #4267B2, #5B7EC2);
-    }
-
-    .twitter {
-      animation: slideFromBottom 0.5s ease-out 4.5s forwards;
-      background: linear-gradient(45deg, #1DA1F2, #4DB5F5);
-    }
-
-    .github {
-      animation: slideFromBottom 0.5s ease-out 4.7s forwards;
-      background: linear-gradient(45deg, #333, #555);
-    }
-
-    .social-button:hover {
-      transform: translateY(-3px) scale(1.05);
-      transition: all 0.3s ease;
-    }
-
-    .welcome-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 3rem;
-      z-index: 1000;
-      animation: welcomeFade 2s ease-out forwards;
-    }
-
-    @keyframes welcomeFade {
-      0% {
-        opacity: 1;
-      }
-
-      80% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    .welcome-text {
-      opacity: 0;
-      animation: welcomeText 1.5s ease-out 0.5s forwards;
-    }
-
-    @keyframes welcomeText {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-
-      50% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .profile {
-        padding: 2rem;
-        margin: 1rem;
-      }
-
-      .profile-title {
-        font-size: 2rem;
-      }
-
-      .profile-image-container {
-        width: 150px;
-        height: 150px;
-      }
-
-      .social-buttons {
-        flex-direction: column;
-      }
-
-      .social-button {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  </style>
+            .button {
+                padding: 0.8rem 1.6rem;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="welcome-overlay">
-    <div class="welcome-text">Bienvenue</div>
-  </div>
-  <div class="page-loader">
-    <div class="loader-content">Chargement...</div>
-  </div>
-  <div class="profile">
-    <div class="profile-image-container">
-      <img src="https://files.catbox.moe/g6cx83.jpg" alt="Image de profil de z4trox" class="profile-image">
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1>Ajouter notre Bot Discord !</h1>
+        <a href="https://discord.com/oauth2/authorize?client_id=1315073498351141017&scope=bot&permissions=8" class="button">Ajouter le Bot</a>
     </div>
-    <h1 class="profile-title">z4trox</h1>
-    <p class="profile-description">
-      Passionné par la technologie et le développement web. Expert en création d'expériences numériques innovantes,
-      toujours à la recherche de nouveaux défis pour repousser les limites du possible.
-    </p>
-    <div class="social-buttons">
-      <a href="https://www.facebook.com" class="social-button facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
-      <a href="https://twitter.com" class="social-button twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
-      <a href="https://github.com" class="social-button github" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </div>
-  </div>
-</body>
 
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#7289da' },
+                shape: { type: 'circle' },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    animation: {
+                        enable: true,
+                        speed: 1,
+                        minimumValue: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    animation: {
+                        enable: true,
+                        speed: 4,
+                        minimumValue: 0.3,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#7289da',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    outModes: { default: 'bounce' },
+                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                }
+            },
+            interactivity: {
+                detectsOn: 'canvas',
+                events: {
+                    onHover: { enable: true, mode: 'repulse' },
+                    onClick: { enable: true, mode: 'push' },
+                    resize: true
+                },
+                modes: {
+                    repulse: { distance: 100, duration: 0.4 },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
 </html>
