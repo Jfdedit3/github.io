@@ -3,193 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter le Bot Discord</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <meta name="description" content="Générateur d'images Waifu utilisant l'API waifu.im">
+    <title>Waifu Gallery</title>
     <style>
         :root {
-            --primary: #7289da;
-            --secondary: #2c2f33;
-            --accent: #99aab5;
-            --neon: #00fff2;
+            --primary: #00e5ff;
+            --secondary: #00bcd4;
+            --accent: #ff00ff;
+            --background: #1a1a1a;
+            --text: #e0e0e0;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            display: grid;
+            place-items: center;
+            padding: 2rem;
         }
 
         .container {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(114, 137, 218, 0.3),
-                        inset 0 0 15px rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            width: 100%;
             text-align: center;
-            max-width: 90%;
-            width: 500px;
-            animation: containerFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes containerFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
 
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--neon));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(114, 137, 218, 0.5);
-            animation: titleGlow 2s ease-in-out infinite;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
         }
 
-        @keyframes titleGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        .gallery {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
         }
 
-        .button {
-            background: linear-gradient(45deg, var(--primary), var(--neon));
-            color: white;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(114, 137, 218, 0.4);
+        .image-container {
             position: relative;
+            border-radius: 1rem;
             overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        #waifu-image {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
+            height: auto;
+            max-width: 500px;
+            display: block;
+            margin: 0 auto;
+            opacity: 0;
+            transition: all 0.5s ease;
+            border-radius: 1rem;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
         }
 
-        .button:hover {
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: 0 0 30px rgba(114, 137, 218, 0.6);
+        #waifu-image.loaded {
+            opacity: 1;
         }
 
-        .button:hover::before {
-            left: 100%;
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 229, 255, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border-radius: 2rem;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 229, 255, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .image-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .image-info.visible {
+            display: block;
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 2rem;
-                margin: 1rem;
+                padding: 1rem;
             }
 
             h1 {
-                font-size: 1.8em;
+                font-size: 2rem;
             }
 
-            .button {
-                padding: 0.8rem 1.6rem;
-                font-size: 1em;
+            button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
     <div class="container">
-        <h1>Ajouter notre Bot Discord !</h1>
-        <a href="https://discord.com/oauth2/authorize?client_id=1315073498351141017&scope=bot&permissions=8" class="button">Ajouter le Bot</a>
+        <h1>Waifu Gallery</h1>
+        <div class="gallery">
+            <div class="image-container">
+                <div class="loading-spinner"></div>
+                <img id="waifu-image" src="" alt="Waifu Image">
+            </div>
+            <div class="image-info">
+                <p id="image-source"></p>
+                <p id="image-tags"></p>
+            </div>
+        </div>
+        <div class="controls">
+            <button onclick="getWaifuImage()" id="generate-btn">
+                <span class="button-text">Nouvelle Waifu</span>
+            </button>
+            <button onclick="downloadImage()" id="download-btn" disabled>
+                <span class="button-text">Télécharger</span>
+            </button>
+        </div>
     </div>
 
     <script>
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: '#7289da' },
-                shape: { type: 'circle' },
-                opacity: {
-                    value: 0.5,
-                    random: true,
-                    animation: {
-                        enable: true,
-                        speed: 1,
-                        minimumValue: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    animation: {
-                        enable: true,
-                        speed: 4,
-                        minimumValue: 0.3,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#7289da',
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    outModes: { default: 'bounce' },
-                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
-                }
-            },
-            interactivity: {
-                detectsOn: 'canvas',
-                events: {
-                    onHover: { enable: true, mode: 'repulse' },
-                    onClick: { enable: true, mode: 'push' },
-                    resize: true
-                },
-                modes: {
-                    repulse: { distance: 100, duration: 0.4 },
-                    push: { particles_nb: 4 }
-                }
-            },
-            retina_detect: true
+        const waifuImage = document.getElementById('waifu-image');
+        const generateBtn = document.getElementById('generate-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const imageInfo = document.querySelector('.image-info');
+        const imageSource = document.getElementById('image-source');
+        const imageTags = document.getElementById('image-tags');
+        let currentImageUrl = '';
+
+        async function getWaifuImage() {
+            try {
+                // Désactiver le bouton pendant le chargement
+                generateBtn.disabled = true;
+                downloadBtn.disabled = true;
+                waifuImage.classList.remove('loaded');
+                imageInfo.classList.remove('visible');
+
+                const response = await fetch('https://api.waifu.im/search');
+                const data = await response.json();
+                const imageData = data.images[0];
+
+                // Précharger l'image
+                const img = new Image();
+                img.src = imageData.url;
+                
+                img.onload = () => {
+                    currentImageUrl = imageData.url;
+                    waifuImage.src = currentImageUrl;
+                    waifuImage.classList.add('loaded');
+                    downloadBtn.disabled = false;
+                    
+                    // Afficher les informations de l'image
+                    imageSource.textContent = `Source: ${imageData.source || 'Inconnue'}`;
+                    imageTags.textContent = `Tags: ${imageData.tags.map(tag => tag.name).join(', ')}`;
+                    imageInfo.classList.add('visible');
+                };
+
+                img.onerror = () => {
+                    alert('Erreur lors du chargement de l\'image. Veuillez réessayer.');
+                    generateBtn.disabled = false;
+                };
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la récupération de l\'image. Veuillez réessayer.');
+            } finally {
+                generateBtn.disabled = false;
+            }
+        }
+
+        async function downloadImage() {
+            if (!currentImageUrl) return;
+            
+            try {
+                const response = await fetch(currentImageUrl);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `waifu-${Date.now()}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Erreur lors du téléchargement:', error);
+                alert('Erreur lors du téléchargement de l\'image.');
+            }
+        }
+
+        // Gestion des raccourcis clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (!generateBtn.disabled) getWaifuImage();
+            } else if (e.code === 'KeyD' && !downloadBtn.disabled) {
+                downloadImage();
+            }
         });
+
+        // Charger une image au démarrage
+        window.addEventListener('load', getWaifuImage);
     </script>
 </body>
 </html>
