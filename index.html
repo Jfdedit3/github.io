@@ -1,136 +1,876 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neko API Viewer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3e8ff;
-        }
-        /* Custom CSS pour une animation de fondu */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bsky Post Viewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #1a1a1a;
+      --text: #e0e0e0;
+      --subtle: #666;
+      --primary: #00aaff;
+      --radius: 16px;
+      --gap: 16px;
+      --font: "Inter", system-ui, sans-serif;
+    }
 
-        /* Animations d'introduction */
-        .animate-slide-down {
-            animation: slideDown 2s ease-out forwards;
-        }
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        .animate-fade-in {
-            animation: fadeIn 2.5s ease-in-out forwards;
-        }
-    </style>
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --card: #f6f6f6;
+      --text: #111;
+      --subtle: #666;
+      --primary: #0077ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .header { text-align: center; margin-bottom: 8px; }
+    .logo { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .logo svg { width: 24px; height: 24px; color: var(--primary); }
+    h1 { font-size: 20px; font-weight: 600; }
+    .subtitle { font-size: 14px; color: var(--subtle); margin-top: 4px; }
+
+    .input-wrapper { position: relative; }
+    input {
+      width: 100%;
+      padding: 12px 36px 12px 16px;
+      border: 1px solid #333;
+      border-radius: var(--radius);
+      font-size: 14px;
+      background: #111;
+      color: var(--text);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    input:focus { outline: none; border-color: var(--primary); }
+    input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .clear-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; font-size: 16px; cursor: pointer;
+      color: var(--subtle);
+      transition: all 0.2s ease;
+    }
+    .clear-btn:hover {
+      transform: rotate(90deg);
+      color: var(--primary);
+    }
+    .hint { font-size: 12px; color: var(--subtle); }
+
+    .post-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      border: 1px solid #222;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+      animation: fadeInUp 0.6s ease-out;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .post-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 170, 255, 0.3);
+    }
+    .post-header { display: flex; align-items: center; gap: var(--gap); }
+    .avatar {
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%;
+      background: var(--primary); 
+      color: #000;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      font-weight: 600; 
+      font-size: 14px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .avatar:hover {
+      transform: scale(1.1);
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .avatar a { color: inherit; text-decoration: none; display:block; width:100%; height:100%; }
+    .post-info { flex: 1; }
+    .display-name { font-weight: 600; font-size: 14px; }
+    .handle { font-size: 13px; color: var(--subtle); }
+    .post-time { font-size: 12px; color: var(--subtle); }
+
+    .post-content { font-size: 14px; line-height: 1.5; }
+    .post-media { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 8px; 
+    }
+    .post-media img, .post-media video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .post-media img:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .post-media {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .post-media img, .post-media video {
+        min-height: 250px;
+        max-height: 400px;
+        border-radius: 12px;
+      }
+      
+      .post-media img:hover {
+        transform: scale(1.01);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .post-media img, .post-media video {
+        min-height: 300px;
+        max-height: 500px;
+      }
+    }
+
+    .post-stats { display: flex; gap: 16px; font-size: 13px; }
+    .stat { display: flex; align-items: center; gap: 4px; transition: color 0.3s ease; }
+    .stat:hover {
+      color: var(--primary);
+    }
+
+    .loading, .error-message { text-align: center; font-size: 14px; margin-top: 8px; }
+    .hidden { display: none; }
+
+    .history-container {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: var(--gap);
+      border: 1px solid #222;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+      margin-top: var(--gap);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .history-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .clear-history-btn {
+      background: none;
+      border: none;
+      color: var(--subtle);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+    }
+
+    .history-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border: 1px solid transparent;
+      animation: slideInRight 0.4s ease-out;
+      animation-fill-mode: both;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #333;
+    }
+
+    .history-item:nth-child(1) { animation-delay: 0.1s; }
+    .history-item:nth-child(2) { animation-delay: 0.2s; }
+    .history-item:nth-child(3) { animation-delay: 0.3s; }
+
+    .history-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .history-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .history-avatar-fallback {
+      display: none;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .history-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .history-handle {
+      font-size: 12px;
+      color: var(--subtle);
+    }
+
+    .history-text {
+      font-size: 12px;
+      color: var(--text);
+      margin-top: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #333;
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: var(--radius);
+      animation: zoomIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+      background-size: 200px 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: calc(200px + 100%) 0; }
+    }
+
+    .actions {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+
+    .btn { padding: 8px 12px; border: 1px solid #2a2a2a; border-radius: 10px; background:#141414; color: var(--text); cursor:pointer; font: 500 13px var(--font); transition: transform .15s ease, background .2s; }
+    .btn:hover { transform: translateY(-1px); background:#1b1b1b; }
+    .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .btn-primary { background: var(--primary); color: #fff; border-color: transparent; }
+    .btn.icon { width: 40px; padding: 8px; display:flex; align-items:center; justify-content:center; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .input-container {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: var(--gap);
+      border: 1px solid #222;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-
-    <!-- Mise à jour pour une meilleure réactivité et un nouveau design -->
-    <div class="bg-gradient-to-br from-purple-100 to-pink-100 p-4 sm:p-8 rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-lg lg:max-w-2xl text-center border-4 border-purple-400">
-        <h1 class="text-4xl font-bold text-purple-800 mb-4 drop-shadow-md animate-slide-down">Neko API Viewer</h1>
-        <p class="text-gray-600 mb-6 animate-fade-in">
-            Cliquez sur le bouton pour afficher une nouvelle image waifu.
-        </p>
-        
-        <div id="image-container" class="w-full h-[60vh] bg-white rounded-xl overflow-hidden mb-4 flex items-center justify-center border-2 border-gray-400 shadow-inner animate-fade-in">
-            <p id="placeholder-text" class="text-gray-500 text-lg">Cliquez sur le bouton pour générer une image</p>
-            <img id="waifu-image" src="" alt="Waifu Image" class="hidden w-full h-full object-contain">
-        </div>
-
-        <p id="image-source" class="text-sm text-gray-500 mb-4 hidden">
-            Source : <a href="#" target="_blank" class="text-blue-500 hover:underline">Chargement...</a>
-        </p>
-        
-        <button id="fetch-button" class="w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-xl border-2 border-purple-800 animate-fade-in">
-            Obtenir une nouvelle image
-        </button>
-
-        <div id="error-message" class="text-red-500 mt-4 hidden">
-            Une erreur s'est produite lors de la récupération de l'image. Veuillez réessayer.
-        </div>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 1.16-.21 2.27-.62 3.3-1.21.5-.29.96-.63 1.38-1.03.42-.4.8-.84 1.12-1.32.32-.48.6-1 .82-1.54.22-.54.38-1.1.48-1.68.1-.58.14-1.18.14-1.79V7L12 2z"/>
+        </svg>
+        <h1>Bluesky Post Viewer</h1>
+      </div>
+      <p class="subtitle">View any Bluesky post in a beautiful, interactive format</p>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const fetchButton = document.getElementById('fetch-button');
-            const waifuImage = document.getElementById('waifu-image');
-            const placeholderText = document.getElementById('placeholder-text');
-            const errorMessage = document.getElementById('error-message');
-            const imageSource = document.getElementById('image-source');
-            const sourceLink = imageSource.querySelector('a');
+    <div class="input-container">
+      <div class="input-wrapper">
+        <input 
+          type="text" 
+          id="postUrl" 
+          placeholder="Paste Bluesky post URL..."
+          autocomplete="off"
+        >
+        <button id="clearBtn" class="clear-btn hidden">✕</button>
+      </div>
+      <div class="input-hints">
+        <span class="hint">💡 Tip: Copy URL from bsky.app and paste here</span>
+      </div>
+      <div class="actions">
+        <button id="pasteBtn" class="btn">Paste</button>
+        <button id="openBtn" class="btn btn-primary">Open in Bluesky</button>
+        <button id="themeToggle" class="btn icon" aria-label="Toggle theme">🌓</button>
+      </div>
+    </div>
+
+    <div id="output" class="output-container"></div>
+    
+    <div id="loading" class="loading hidden">
+      <div class="loading-spinner"></div>
+      <p>Loading post...</p>
+    </div>
+
+    <div id="error" class="error-message hidden"></div>
+  </div>
+
+  <script>
+    class BlueskyViewer {
+      constructor() {
+        this.postUrl = document.getElementById('postUrl');
+        this.output = document.getElementById('output');
+        this.loading = document.getElementById('loading');
+        this.error = document.getElementById('error');
+        this.clearBtn = document.getElementById('clearBtn');
+        this.pasteBtn = document.getElementById('pasteBtn');
+        this.openBtn = document.getElementById('openBtn');
+        this.themeToggle = document.getElementById('themeToggle');
+        
+        this.debounceTimer = null;
+        this.maxHistory = 10;
+        this.historyKey = 'bskyHistory';
+        this.init();
+      }
+
+      async init() {
+        this.postUrl.addEventListener('input', () => this.handleInput());
+        this.clearBtn.addEventListener('click', () => this.clearInput());
+        this.pasteBtn.addEventListener('click', () => this.pasteFromClipboard());
+        this.openBtn.addEventListener('click', () => this.openInBluesky());
+        this.themeToggle.addEventListener('click', () => this.toggleTheme());
+        document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark';
+        
+        const savedUrl = localStorage.getItem('lastBskyUrl');
+        if (savedUrl) {
+          this.postUrl.value = savedUrl;
+          this.fetchPost();
+        }
+        
+        this.displayHistory();
+      }
+
+      handleInput() {
+        const hasValue = this.postUrl.value.trim().length > 0;
+        this.clearBtn.classList.toggle('hidden', !hasValue);
+        
+        if (this.postUrl.value.match(/profile\/([^/]+)\/post\/([^/]+)/)) {
+          this.pulse(this.postUrl);
+        }
+        
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
+          if (this.postUrl.value.trim()) {
+            this.fetchPost();
+          } else {
+            this.clearOutput();
+          }
+        }, 800);
+      }
+
+      pulse(element) {
+        element.style.animation = 'pulse 0.6s ease-in-out';
+        setTimeout(() => {
+          element.style.animation = '';
+        }, 600);
+      }
+
+      clearInput() {
+        this.postUrl.value = '';
+        this.clearBtn.classList.add('hidden');
+        this.clearOutput();
+        localStorage.removeItem('lastBskyUrl');
+      }
+
+      clearOutput() {
+        this.output.innerHTML = '';
+        this.hideError();
+      }
+
+      showLoading() {
+        this.loading.classList.remove('hidden');
+        this.hideError();
+      }
+
+      hideLoading() {
+        this.loading.classList.add('hidden');
+      }
+
+      showError(message) {
+        this.error.textContent = message;
+        this.error.classList.remove('hidden');
+      }
+
+      hideError() {
+        this.error.classList.add('hidden');
+      }
+
+      toggleTheme() {
+        const root = document.documentElement;
+        const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+        root.dataset.theme = next; localStorage.setItem('theme', next);
+      }
+
+      async pasteFromClipboard() {
+        try { 
+          const text = await navigator.clipboard.readText();
+          if (text) { this.postUrl.value = text.trim(); this.handleInput(); }
+        } catch (e) { this.showError('Clipboard not available'); }
+      }
+
+      openInBluesky() {
+        const url = this.postUrl.value.trim();
+        const match = url.match(/profile\/([^/]+)\/post\/([^/]+)/);
+        if (match) window.open(url, '_blank');
+        else this.showError('Provide a valid Bluesky post URL');
+      }
+
+      async addToHistory(postData) {
+        try {
+          const response = await fetch('/api/v1/metadata/bskyHistory');
+          let history = [];
+          
+          if (response.ok) {
+            const data = await response.json();
+            history = data.value || [];
+          }
+          
+          const historyItem = {
+            uri: postData.uri,
+            handle: postData.author?.handle || 'unknown',
+            displayName: postData.author?.displayName || 'Unknown',
+            text: postData.record?.text?.substring(0, 100) + '...' || '',
+            avatar: postData.author?.avatar || '',
+            timestamp: new Date().toISOString()
+          };
+          
+          history = history.filter(item => item.uri !== historyItem.uri);
+          history.unshift(historyItem);
+          history = history.slice(0, this.maxHistory);
+          
+          const saveResponse = await fetch('/api/v1/metadata/bskyHistory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ value: history })
+          });
+          
+          if (!saveResponse.ok) {
+            throw new Error('Failed to save history');
+          }
+          
+          this.displayHistory();
+        } catch (err) {
+          console.error('Failed to save to history:', err);
+          this.fallbackToLocalStorage(postData);
+        }
+      }
+
+      fallbackToLocalStorage(postData) {
+        let history = JSON.parse(localStorage.getItem('bskyHistory') || '[]');
+        
+        const historyItem = {
+          uri: postData.uri,
+          handle: postData.author?.handle || 'unknown',
+          displayName: postData.author?.displayName || 'Unknown',
+          text: postData.record?.text?.substring(0, 100) + '...' || '',
+          avatar: postData.author?.avatar || '',
+          timestamp: new Date().toISOString()
+        };
+        
+        history = history.filter(item => item.uri !== historyItem.uri);
+        history.unshift(historyItem);
+        history = history.slice(0, this.maxHistory);
+        
+        localStorage.setItem('bskyHistory', JSON.stringify(history));
+        this.displayHistory();
+      }
+
+      async displayHistory() {
+        try {
+          const response = await fetch('/api/v1/metadata/bskyHistory');
+          let history = [];
+          
+          if (response.ok) {
+            const data = await response.json();
+            history = data.value || [];
+          } else {
+            history = JSON.parse(localStorage.getItem('bskyHistory') || '[]');
+          }
+          
+          const existingHistory = document.getElementById('historyContainer');
+          
+          if (existingHistory) {
+            existingHistory.style.opacity = '0';
+            existingHistory.style.transform = 'translateY(-10px)';
+            setTimeout(() => existingHistory.remove(), 300);
+          }
+          
+          if (history.length === 0) return;
+          
+          const historyContainer = document.createElement('div');
+          historyContainer.id = 'historyContainer';
+          historyContainer.className = 'history-container';
+          historyContainer.style.opacity = '0';
+          historyContainer.style.transform = 'translateY(-10px)';
+          historyContainer.style.transition = 'all 0.3s ease-out';
+          
+          const header = document.createElement('div');
+          header.className = 'history-header';
+          header.innerHTML = `
+            <h3>Recently Viewed</h3>
+            <button class="clear-history-btn" onclick="this.closest('.history-container').remove()">✕</button>
+          `;
+          historyContainer.appendChild(header);
+          
+          history.forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.innerHTML = `
+              <div class="history-avatar">
+                ${item.avatar ? `<img src="${item.avatar}" alt="${item.displayName}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ''}
+                <div class="history-avatar-fallback">${item.displayName.charAt(0).toUpperCase()}</div>
+              </div>
+              <div class="history-content">
+                <div class="history-name">${item.displayName}</div>
+                <div class="history-handle">@${item.handle}</div>
+                <div class="history-text">${item.text}</div>
+              </div>
+            `;
             
-            async function fetchImage() {
-                // Rétablir l'état initial
-                waifuImage.classList.add('hidden');
-                errorMessage.classList.add('hidden');
-                imageSource.classList.add('hidden');
-                placeholderText.textContent = "Chargement...";
-                placeholderText.classList.remove('hidden');
-
-                try {
-                    const url = 'https://nekos.best/api/v2/waifu';
-                    const response = await fetch(url);
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    
-                    if (data && data.results && data.results.length > 0) {
-                        const result = data.results[0];
-                        const imageUrl = result.url;
-                        const artistName = result.artist_name || 'Inconnu';
-                        const sourceUrl = result.source_url || '#';
-                        
-                        waifuImage.src = imageUrl;
-                        sourceLink.href = sourceUrl;
-                        sourceLink.textContent = artistName;
-
-                        waifuImage.onload = () => {
-                            placeholderText.classList.add('hidden');
-                            waifuImage.classList.remove('hidden');
-                            waifuImage.classList.add('fade-in');
-                            imageSource.classList.remove('hidden');
-                        };
-                        
-                        waifuImage.onerror = () => {
-                            placeholderText.textContent = "Erreur de chargement de l'image.";
-                            errorMessage.classList.remove('hidden');
-                            waifuImage.src = '';
-                        };
-                    } else {
-                        throw new Error('Aucune image trouvée pour ce tag.');
-                    }
-                } catch (error) {
-                    console.error('Erreur lors de la récupération de l\'API:', error);
-                    placeholderText.textContent = "Erreur de connexion ou tag invalide.";
-                    errorMessage.classList.remove('hidden');
-                    waifuImage.src = '';
-                }
-            }
+            historyItem.addEventListener('click', () => {
+              const url = `https://bsky.app/profile/${item.handle}/post/${item.uri.split('/').pop()}`;
+              this.postUrl.value = url;
+              this.fetchPost();
+            });
             
-            fetchButton.addEventListener('click', fetchImage);
+            historyContainer.appendChild(historyItem);
+          });
+          
+          document.querySelector('.container').appendChild(historyContainer);
+          
+          requestAnimationFrame(() => {
+            historyContainer.style.opacity = '1';
+            historyContainer.style.transform = 'translateY(0)';
+          });
+        } catch (err) {
+          console.error('Failed to display history:', err);
+        }
+      }
 
-            // Charger une image par défaut au début
-            fetchImage();
+      async fetchPost() {
+        const urlInput = this.postUrl.value.trim();
+        if (!urlInput) return;
+
+        localStorage.setItem('lastBskyUrl', urlInput);
+
+        this.showLoading();
+
+        const match = urlInput.match(/profile\/([^/]+)\/post\/([^/]+)/);
+        if (!match) {
+          this.showError('Invalid URL format. Please use: https://bsky.app/profile/handle/post/rkey');
+          this.hideLoading();
+          return;
+        }
+
+        const [_, handle, rkey] = match;
+        const postUri = `at://${handle}/app.bsky.feed.post/${rkey}`;
+        const apiUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getPostThread?uri=${postUri}&depth=0`;
+
+        try {
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error('Failed to fetch post');
+          
+          const data = await res.json();
+          this.renderPost(data);
+          
+          if (data.thread?.post) {
+            setTimeout(() => {
+              this.addToHistory(data.thread.post);
+            }, 300);
+          }
+        } catch (err) {
+          this.showError(`Error: ${err.message}`);
+        } finally {
+          this.hideLoading();
+        }
+      }
+
+      renderPost(data) {
+        this.output.innerHTML = '';
+        
+        if (!data.thread || !data.thread.post) {
+          this.showError('No post found');
+          return;
+        }
+
+        const post = data.thread.post;
+        const author = post.author || {};
+        const record = post.record || {};
+
+        const postCard = document.createElement('div');
+        postCard.className = 'post-card';
+
+        const header = this.createPostHeader(author, post.indexedAt);
+        postCard.appendChild(header);
+
+        const content = this.createPostContent(record.text);
+        postCard.appendChild(content);
+
+        if (post.embed) {
+          const media = this.createPostMedia(post.embed);
+          if (media) postCard.appendChild(media);
+        }
+
+        const stats = this.createPostStats(post);
+        postCard.appendChild(stats);
+
+        this.output.appendChild(postCard);
+        
+        this.fadeIn(postCard, 600);
+      }
+
+      createPostHeader(author, indexedAt) {
+        const header = document.createElement('div');
+        header.className = 'post-header';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        
+        if (author.avatar) {
+          const profileUrl = author.handle ? `https://bsky.app/profile/${author.handle}` : '#';
+          const img = document.createElement('img');
+          img.src = author.avatar; img.alt = author.displayName || 'Avatar';
+          const link = document.createElement('a');
+          link.href = profileUrl; link.target = '_blank'; link.rel = 'noopener';
+          link.appendChild(img); avatar.appendChild(link);
+        } else {
+          avatar.innerHTML = `<a href="#" target="_blank" rel="noopener">${(author.displayName?.charAt(0).toUpperCase() || '@')}</a>`;
+        }
+
+        const info = document.createElement('div');
+        info.className = 'post-info';
+
+        const name = document.createElement('div');
+        name.className = 'display-name';
+        const profileUrl = author.handle ? `https://bsky.app/profile/${author.handle}` : '#';
+        name.innerHTML = `<a href="${profileUrl}" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">${author.displayName || 'Unknown'}</a>`;
+
+        const handle = document.createElement('div');
+        handle.className = 'handle';
+        const profileUrlHandle = author.handle ? `https://bsky.app/profile/${author.handle}` : '#';
+        handle.innerHTML = `<a href="${profileUrlHandle}" target="_blank" rel="noopener" style="color:var(--subtle); text-decoration:none;">@${author.handle || 'unknown'}</a>`;
+
+        info.appendChild(name);
+        info.appendChild(handle);
+
+        const time = document.createElement('div');
+        time.className = 'post-time';
+        time.textContent = this.formatTime(indexedAt);
+
+        header.appendChild(avatar);
+        header.appendChild(info);
+        header.appendChild(time);
+
+        return header;
+      }
+
+      createPostContent(text) {
+        const content = document.createElement('div');
+        content.className = 'post-content';
+        
+        const parsedText = this.parseFacets(text || '');
+        content.innerHTML = parsedText;
+        
+        return content;
+      }
+
+      parseFacets(text) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: none;">$1</a>');
+      }
+
+      createPostMedia(embed) {
+        if (!embed.images && !embed.video) return null;
+
+        const mediaContainer = document.createElement('div');
+        mediaContainer.className = 'post-media';
+
+        if (embed.images) {
+          embed.images.forEach(img => {
+            const imgEl = document.createElement('img');
+            imgEl.src = img.fullsize || img.thumb;
+            imgEl.alt = 'Post image';
+            imgEl.addEventListener('click', () => this.openModal(img.fullsize || img.thumb));
+            mediaContainer.appendChild(imgEl);
+          });
+        }
+
+        if (embed.video) {
+          const video = document.createElement('video');
+          video.src = embed.video.fullsize;
+          video.controls = true;
+          mediaContainer.appendChild(video);
+        }
+
+        return mediaContainer;
+      }
+
+      createPostStats(post) {
+        const stats = document.createElement('div');
+        stats.className = 'post-stats';
+
+        const statsData = [
+          { label: 'likes', value: post.likeCount || 0, icon: '❤️' },
+          { label: 'reposts', value: post.repostCount || 0, icon: '🔄' },
+          { label: 'replies', value: post.replyCount || 0, icon: '💬' }
+        ];
+
+        statsData.forEach(stat => {
+          const statEl = document.createElement('div');
+          statEl.className = 'stat';
+          statEl.innerHTML = `
+            <span>${stat.icon}</span>
+            <span>${this.formatNumber(stat.value)}</span>
+          `;
+          stats.appendChild(statEl);
         });
-    </script>
+
+        return stats;
+      }
+
+      openModal(src) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `<img src="${src}" alt="Full size image">`;
+        modal.addEventListener('click', () => modal.remove());
+        document.body.appendChild(modal);
+      }
+
+      formatTime(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        
+        if (minutes < 1) return 'Just now';
+        if (minutes < 60) return `${minutes}m`;
+        if (hours < 24) return `${hours}h`;
+        if (days < 7) return `${days}d`;
+        
+        return date.toLocaleDateString();
+      }
+
+      formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toString();
+      }
+
+      fadeIn(element, duration = 300) {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = `all ${duration}ms ease-out`;
+        
+        requestAnimationFrame(() => {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        });
+      }
+    }
+
+    new BlueskyViewer();
+  </script>
 </body>
 </html>
-
