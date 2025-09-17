@@ -8,7 +8,6 @@
   <style>
     /* --- Améliorations des Animations --- */
 
-    /* Utilisation de 'ease-out' et 'cubic-bezier' pour des mouvements plus naturels */
     @keyframes fadeInUpImproved {
       from {
         opacity: 0;
@@ -74,14 +73,6 @@
       }
     }
 
-    /* Animation pour le survol de la section */
-    @keyframes liftUp {
-      to {
-        transform: translateY(-10px);
-      }
-    }
-
-
     * {
       margin: 0;
       padding: 0;
@@ -95,12 +86,10 @@
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
-      /* Désactiver les sélections pour éviter les effets indésirables */
       -webkit-user-select: none;
          -moz-user-select: none;
           -ms-user-select: none;
               user-select: none;
-      /* Empêcher le zoom sur double tap (sur mobile) */
       touch-action: manipulation;
     }
 
@@ -114,7 +103,6 @@
     .header-content {
       position: relative;
       z-index: 2;
-      /* Amélioration : Animation plus rapide et plus douce */
       opacity: 0;
       animation: fadeInImproved 0.6s ease-out 0.3s forwards;
     }
@@ -126,7 +114,6 @@
       letter-spacing: 2px;
       color: #ffcc00;
       opacity: 0;
-      /* Amélioration : Timing plus doux */
       animation: fadeInDownImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 0.5s forwards;
     }
 
@@ -142,7 +129,6 @@
       color: transparent;
       text-shadow: 0 5px 15px rgba(0,0,0,0.3);
       opacity: 0;
-      /* Amélioration : Timing plus doux */
       animation: fadeInUpImproved 0.7s cubic-bezier(0.33, 1, 0.68, 1) 0.8s forwards;
     }
 
@@ -162,7 +148,6 @@
       font-size: 1.3rem;
       font-weight: 600;
       border-radius: 35px;
-      /* Amélioration : Transition plus rapide et plus douce */
       transition: all 0.3s cubic-bezier(0.33, 1, 0.68, 1);
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -172,18 +157,10 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      /* Empêcher la sélection du texte dans le bouton */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
-      /* Pointer cursor pour indiquer que c'est cliquable */
       cursor: pointer;
-      /* Empêcher le outline par défaut */
       outline: none;
     }
 
-    /* Amélioration : Réduction des délais et ajustement des timings */
     nav.socials a:nth-child(1) { 
       animation: slideInLeftImproved 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.2s forwards; 
     }
@@ -216,7 +193,6 @@
       left: 100%;
     }
 
-    /* Style pour l'état actif (clic) */
     nav.socials a:active {
       transform: translateY(0) scale(0.97);
       transition: all 0.1s ease;
@@ -235,29 +211,22 @@
       border-radius: 20px;
       padding: 40px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(40px);
-      /* Amélioration : Transition plus rapide et plus douce */
-      transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      /* Empêcher la sélection du texte dans la section */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
+      cursor: default;
+      /* Sections visibles par défaut, sans animation */
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* Amélioration : Réduction des délais et ajustement des timings */
-    .about { 
-      animation: fadeInUpImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 1.9s forwards; 
-    }
-    .requests { 
-      animation: fadeInUpImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 2.2s forwards; 
+    /* --- Animations supprimées pour .about et .requests --- */
+    /* Les sections sont maintenant visibles dès le départ */
+    .about, .requests {
+      /* Pas d'animation ici */
     }
 
-    /* Amélioration : Ajout d'une animation au survol */
     section:hover {
-      animation: liftUp 0.4s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+      transform: translateY(-10px);
+      transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       border-color: rgba(255, 204, 0, 0.4);
     }
@@ -271,11 +240,6 @@
       display: inline-block;
       padding-bottom: 15px;
       letter-spacing: 1px;
-      /* Empêcher la sélection du texte du titre */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
     }
 
     section h2::after {
@@ -286,7 +250,6 @@
       width: 0;
       height: 4px;
       background: linear-gradient(to right, #ffcc00, transparent);
-      /* Amélioration : Transition plus rapide */
       transition: width 0.4s ease;
     }
 
@@ -300,25 +263,16 @@
       gap: 40px;
     }
 
-    /* --- CORRECTION DU BUG DE L'IMAGE --- */
     .about img {
       flex-shrink: 0;
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-radius: 15px;
       max-width: 220px;
       transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
-      /* Initial state for smooth fade-in after load */
       opacity: 0;
-      transform: scale(0.8);
-      /* Use visibility to prevent rendering issues until loaded */
       visibility: hidden;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       pointer-events: none;
-      /* Empêcher la sélection de l'image */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
     }
 
     .about img.loaded {
@@ -343,30 +297,17 @@
       line-height: 1.9;
       margin-bottom: 20px;
       color: #e0e0e0;
-      /* Empêcher la sélection du texte par défaut */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
     }
 
     .requests a {
       color: #ffcc00;
       text-decoration: none;
       font-weight: 600;
-      /* Amélioration : Transition plus rapide */
       transition: all 0.2s ease;
       position: relative;
       padding-bottom: 2px;
-      /* Pointer cursor pour indiquer que c'est cliquable */
       cursor: pointer;
-      /* Empêcher le outline par défaut */
       outline: none;
-      /* Autoriser la sélection du texte du lien */
-      -webkit-user-select: text;
-         -moz-user-select: text;
-          -ms-user-select: text;
-              user-select: text;
     }
 
     .requests a::after {
@@ -377,7 +318,6 @@
       width: 0;
       height: 2px;
       background: #ffcc00;
-      /* Amélioration : Transition plus rapide */
       transition: width 0.3s ease;
     }
 
@@ -387,12 +327,6 @@
 
     .requests a:hover::after {
       width: 100%;
-    }
-
-    /* Style pour l'état actif (clic) du lien */
-    .requests a:active {
-      transform: scale(0.97);
-      transition: all 0.1s ease;
     }
 
     footer {
@@ -405,14 +339,8 @@
       margin-top: 60px;
       opacity: 0;
       transform: translateY(30px);
-      /* Amélioration : Timing plus rapide */
       animation: fadeInUpImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 2.7s forwards;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
-      /* Empêcher la sélection du texte du footer */
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none;
     }
 
     @media (max-width: 768px) {
@@ -462,7 +390,6 @@
       <p>AI Art • SFW • NSFW</p>
       <h1>z4trox</h1>
       <nav class="socials">
-        <!-- Correction des espaces dans les liens -->
         <a href="https://x.com/z4trox1" target="_blank" rel="noopener noreferrer">🐦 Twitter</a>
         <a href="https://www.patreon.com/z4trox" target="_blank" rel="noopener noreferrer">💛 Patreon</a>
         <a href="https://www.pixiv.net/en/users/102110656" target="_blank" rel="noopener noreferrer">📊 Pixiv</a>
@@ -474,7 +401,6 @@
     <section class="about">
       <h2>About</h2>
       <div class="about-content">
-        <!-- Ajout de la classe 'about-img' -->
         <img src="akzh21.jpg" alt="Illustration of z4trox" loading="lazy" class="about-img">
         <div class="about-text">
           <p>I create AI-assisted images. Content may be NSFW/SFW — strictly for adults only.</p>
@@ -484,7 +410,6 @@
 
     <section class="requests">
       <h2>Requests</h2>
-      <!-- Correction des espaces dans les liens -->
       <p>Support me on <a href="https://www.patreon.com/z4trox" target="_blank" rel="noopener noreferrer">Patreon</a> or DM me on <a href="https://x.com/z4trox1" target="_blank" rel="noopener noreferrer">Twitter</a> when commissions are open.</p>
       <p>I only accept requests for known characters that are 18+.</p>
     </section>
@@ -503,72 +428,60 @@
           console.log('Image failed to load:', this.src);
           this.style.backgroundColor = '#333';
           this.style.border = '2px solid #ffcc00';
-          // Assurez-vous que l'image reste visible même en cas d'erreur
           this.classList.add('loaded');
         };
         
         img.onload = function() {
           console.log('Image loaded:', this.src);
-          // Une fois l'image chargée, on active l'animation
           this.classList.add('loaded');
           
-          // Déclencher l'animation de flottement si nécessaire
           if (this.classList.contains('about-img')) {
             this.style.animation = 'floatImproved 3s ease-in-out infinite';
           }
         };
       });
-      
-      // --- Gestion des clics ---
-      // Désactiver tous les événements de clic sur le body sauf pour les liens et boutons
+
+      // Gestion des clics
       document.body.addEventListener('click', function(e) {
-        // Si l'élément cliqué est un lien ou un bouton, laissez l'action se produire
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a, button')) {
-          return; // Ne rien faire, laissez le navigateur gérer le clic
+        if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON') {
+          return;
         }
-        // Sinon, empêcher l'action par défaut (comme la sélection de texte)
         e.preventDefault();
       });
 
-      // Ajouter un style visuel pour les liens actifs
+      // Feedback visuel pour les liens
       const links = document.querySelectorAll('a');
       links.forEach(link => {
         link.addEventListener('mousedown', function(e) {
-          // Ajouter une classe pour le style actif
           this.classList.add('link-active');
         });
         
         link.addEventListener('mouseup', function(e) {
-          // Retirer la classe pour le style actif
           this.classList.remove('link-active');
         });
         
         link.addEventListener('mouseleave', function(e) {
-          // Retirer la classe si la souris quitte le lien pendant le clic
           this.classList.remove('link-active');
         });
       });
 
-      // Ajouter un style visuel pour les boutons actifs
-      const buttons = document.querySelectorAll('button, .socials a'); // Les liens dans .socials agissent comme des boutons
+      // Feedback visuel pour les boutons
+      const buttons = document.querySelectorAll('.socials a');
       buttons.forEach(button => {
         button.addEventListener('mousedown', function(e) {
-          // Ajouter une classe pour le style actif
           this.classList.add('button-active');
         });
         
         button.addEventListener('mouseup', function(e) {
-          // Retirer la classe pour le style actif
           this.classList.remove('button-active');
         });
         
         button.addEventListener('mouseleave', function(e) {
-          // Retirer la classe si la souris quitte le bouton pendant le clic
           this.classList.remove('button-active');
         });
       });
 
-      // Ajouter le style CSS pour les états actifs via JavaScript
+      // Ajouter le style pour les états actifs
       const style = document.createElement('style');
       style.textContent = `
         .link-active, .button-active {
