@@ -18,6 +18,42 @@
       }
     }
 
+    @keyframes rainbowBG {
+      0% {
+        background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
+      }
+      10% {
+        background: linear-gradient(-45deg, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff);
+      }
+      20% {
+        background: linear-gradient(-45deg, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+      }
+      30% {
+        background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
+      }
+      40% {
+        background: linear-gradient(-45deg, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff);
+      }
+      50% {
+        background: linear-gradient(-45deg, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+      }
+      60% {
+        background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
+      }
+      70% {
+        background: linear-gradient(-45deg, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff);
+      }
+      80% {
+        background: linear-gradient(-45deg, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+      }
+      90% {
+        background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
+      }
+      100% {
+        background: linear-gradient(-45deg, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff);
+      }
+    }
+
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -31,13 +67,13 @@
 
     @keyframes glow {
       0% {
-        box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
       }
       50% {
-        box-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
       }
       100% {
-        box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
       }
     }
 
@@ -60,17 +96,6 @@
       }
     }
 
-    @keyframes expandWidth {
-      from {
-        width: 0;
-        opacity: 0;
-      }
-      to {
-        width: 100%;
-        opacity: 1;
-      }
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -86,7 +111,41 @@
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
-      transition: background 0.3s ease;
+      transition: background 0.5s ease;
+    }
+
+    body.rainbow-theme {
+      animation: rainbowBG 20s ease infinite;
+      background-size: 400% 400%;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .theme-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
     }
 
     .page-loader {
@@ -352,6 +411,12 @@
   </style>
 </head>
 <body>
+  <div class="theme-toggle" id="themeToggle">
+    <svg viewBox="0 0 24 24">
+      <path d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"></path>
+    </svg>
+  </div>
+
   <div class="page-loader">
     <div class="loader-content">Loading z4trox...</div>
   </div>
@@ -391,8 +456,29 @@
   </footer>
 
   <script>
-    // Gestion du chargement des images
+    // Gestion du changement de thème
     document.addEventListener('DOMContentLoaded', function() {
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
+      
+      // Vérifier si un thème est déjà enregistré
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'rainbow') {
+        body.classList.add('rainbow-theme');
+      }
+      
+      themeToggle.addEventListener('click', function() {
+        body.classList.toggle('rainbow-theme');
+        
+        // Enregistrer le choix de l'utilisateur
+        if (body.classList.contains('rainbow-theme')) {
+          localStorage.setItem('theme', 'rainbow');
+        } else {
+          localStorage.setItem('theme', 'default');
+        }
+      });
+      
+      // Gestion du chargement des images
       const images = document.querySelectorAll('img');
       
       images.forEach(img => {
