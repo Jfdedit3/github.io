@@ -6,18 +6,6 @@
   <title>z4trox</title>
   <meta name="description" content="z4trox - Creating AI-assisted art and comics. NSFW/SFW content for adults.">
   <style>
-    @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
     @keyframes rainbowBG {
       0% {
         background: linear-gradient(-45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00);
@@ -107,45 +95,11 @@
       min-height: 100vh;
       background: linear-gradient(-45deg, #2b0000, #3a0000, #1a0000, #4a0000);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      animation: rainbowBG 20s ease infinite;
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
       transition: background 0.5s ease;
-    }
-
-    body.rainbow-theme {
-      animation: rainbowBG 20s ease infinite;
-      background-size: 400% 400%;
-    }
-
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(5px);
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.1);
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .theme-toggle svg {
-      width: 24px;
-      height: 24px;
-      fill: white;
     }
 
     .page-loader {
@@ -411,12 +365,6 @@
   </style>
 </head>
 <body>
-  <div class="theme-toggle" id="themeToggle">
-    <svg viewBox="0 0 24 24">
-      <path d="M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z"></path>
-    </svg>
-  </div>
-
   <div class="page-loader">
     <div class="loader-content">Loading z4trox...</div>
   </div>
@@ -456,29 +404,8 @@
   </footer>
 
   <script>
-    // Gestion du changement de thème
+    // Gestion du chargement des images
     document.addEventListener('DOMContentLoaded', function() {
-      const themeToggle = document.getElementById('themeToggle');
-      const body = document.body;
-      
-      // Vérifier si un thème est déjà enregistré
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'rainbow') {
-        body.classList.add('rainbow-theme');
-      }
-      
-      themeToggle.addEventListener('click', function() {
-        body.classList.toggle('rainbow-theme');
-        
-        // Enregistrer le choix de l'utilisateur
-        if (body.classList.contains('rainbow-theme')) {
-          localStorage.setItem('theme', 'rainbow');
-        } else {
-          localStorage.setItem('theme', 'default');
-        }
-      });
-      
-      // Gestion du chargement des images
       const images = document.querySelectorAll('img');
       
       images.forEach(img => {
