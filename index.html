@@ -95,6 +95,13 @@
       color: #fff;
       line-height: 1.6;
       overflow-x: hidden;
+      /* Désactiver les sélections pour éviter les effets indésirables */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+      /* Empêcher le zoom sur double tap (sur mobile) */
+      touch-action: manipulation;
     }
 
     header {
@@ -165,6 +172,15 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      /* Empêcher la sélection du texte dans le bouton */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+      /* Pointer cursor pour indiquer que c'est cliquable */
+      cursor: pointer;
+      /* Empêcher le outline par défaut */
+      outline: none;
     }
 
     /* Amélioration : Réduction des délais et ajustement des timings */
@@ -200,8 +216,9 @@
       left: 100%;
     }
 
+    /* Style pour l'état actif (clic) */
     nav.socials a:active {
-      transform: translateY(0) scale(0.95);
+      transform: translateY(0) scale(0.97);
       transition: all 0.1s ease;
     }
 
@@ -223,6 +240,11 @@
       /* Amélioration : Transition plus rapide et plus douce */
       transition: all 0.4s cubic-bezier(0.33, 1, 0.68, 1);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      /* Empêcher la sélection du texte dans la section */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
     }
 
     /* Amélioration : Réduction des délais et ajustement des timings */
@@ -249,6 +271,11 @@
       display: inline-block;
       padding-bottom: 15px;
       letter-spacing: 1px;
+      /* Empêcher la sélection du texte du titre */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
     }
 
     section h2::after {
@@ -287,6 +314,11 @@
       visibility: hidden;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       pointer-events: none;
+      /* Empêcher la sélection de l'image */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
     }
 
     .about img.loaded {
@@ -311,6 +343,11 @@
       line-height: 1.9;
       margin-bottom: 20px;
       color: #e0e0e0;
+      /* Empêcher la sélection du texte par défaut */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
     }
 
     .requests a {
@@ -321,6 +358,15 @@
       transition: all 0.2s ease;
       position: relative;
       padding-bottom: 2px;
+      /* Pointer cursor pour indiquer que c'est cliquable */
+      cursor: pointer;
+      /* Empêcher le outline par défaut */
+      outline: none;
+      /* Autoriser la sélection du texte du lien */
+      -webkit-user-select: text;
+         -moz-user-select: text;
+          -ms-user-select: text;
+              user-select: text;
     }
 
     .requests a::after {
@@ -343,6 +389,12 @@
       width: 100%;
     }
 
+    /* Style pour l'état actif (clic) du lien */
+    .requests a:active {
+      transform: scale(0.97);
+      transition: all 0.1s ease;
+    }
+
     footer {
       text-align: center;
       padding: 40px;
@@ -356,6 +408,11 @@
       /* Amélioration : Timing plus rapide */
       animation: fadeInUpImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 2.7s forwards;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
+      /* Empêcher la sélection du texte du footer */
+      -webkit-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
     }
 
     @media (max-width: 768px) {
@@ -462,16 +519,64 @@
         };
       });
       
+      // --- Gestion des clics ---
+      // Désactiver tous les événements de clic sur le body sauf pour les liens et boutons
+      document.body.addEventListener('click', function(e) {
+        // Si l'élément cliqué est un lien ou un bouton, laissez l'action se produire
+        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a, button')) {
+          return; // Ne rien faire, laissez le navigateur gérer le clic
+        }
+        // Sinon, empêcher l'action par défaut (comme la sélection de texte)
+        e.preventDefault();
+      });
+
+      // Ajouter un style visuel pour les liens actifs
       const links = document.querySelectorAll('a');
       links.forEach(link => {
-        link.addEventListener('click', function(e) {
-          // Amélioration : Animation de clic plus subtile
-          this.style.transform = 'scale(0.97)';
-          setTimeout(() => {
-            this.style.transform = '';
-          }, 100);
+        link.addEventListener('mousedown', function(e) {
+          // Ajouter une classe pour le style actif
+          this.classList.add('link-active');
+        });
+        
+        link.addEventListener('mouseup', function(e) {
+          // Retirer la classe pour le style actif
+          this.classList.remove('link-active');
+        });
+        
+        link.addEventListener('mouseleave', function(e) {
+          // Retirer la classe si la souris quitte le lien pendant le clic
+          this.classList.remove('link-active');
         });
       });
+
+      // Ajouter un style visuel pour les boutons actifs
+      const buttons = document.querySelectorAll('button, .socials a'); // Les liens dans .socials agissent comme des boutons
+      buttons.forEach(button => {
+        button.addEventListener('mousedown', function(e) {
+          // Ajouter une classe pour le style actif
+          this.classList.add('button-active');
+        });
+        
+        button.addEventListener('mouseup', function(e) {
+          // Retirer la classe pour le style actif
+          this.classList.remove('button-active');
+        });
+        
+        button.addEventListener('mouseleave', function(e) {
+          // Retirer la classe si la souris quitte le bouton pendant le clic
+          this.classList.remove('button-active');
+        });
+      });
+
+      // Ajouter le style CSS pour les états actifs via JavaScript
+      const style = document.createElement('style');
+      style.textContent = `
+        .link-active, .button-active {
+          transform: scale(0.97) !important;
+          transition: transform 0.1s ease !important;
+        }
+      `;
+      document.head.appendChild(style);
     });
   </script>
 </body>
