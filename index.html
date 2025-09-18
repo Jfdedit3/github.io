@@ -8,7 +8,7 @@
   <style>
     /* --- Améliorations des Animations --- */
 
-    @keyframes fadeInUpImproved {
+    @keyframes fadeInUp {
       from {
         opacity: 0;
         transform: translateY(50px);
@@ -19,7 +19,7 @@
       }
     }
 
-    @keyframes fadeInDownImproved {
+    @keyframes fadeInDown {
       from {
         opacity: 0;
         transform: translateY(-50px);
@@ -30,7 +30,7 @@
       }
     }
 
-    @keyframes fadeInImproved {
+    @keyframes fadeIn {
       from {
         opacity: 0;
       }
@@ -39,7 +39,7 @@
       }
     }
 
-    @keyframes scaleInImproved {
+    @keyframes scaleIn {
       from {
         opacity: 0;
         transform: scale(0.8);
@@ -50,7 +50,7 @@
       }
     }
 
-    @keyframes slideInLeftImproved {
+    @keyframes slideInLeft {
       from {
         opacity: 0;
         transform: translateX(-100px);
@@ -61,7 +61,7 @@
       }
     }
 
-    @keyframes floatImproved {
+    @keyframes float {
       0% {
         transform: translateY(0px);
       }
@@ -70,6 +70,27 @@
       }
       100% {
         transform: translateY(0px);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(255, 204, 0, 0.7), 0 0 40px rgba(255, 204, 0, 0.5);
       }
     }
 
@@ -104,7 +125,7 @@
       position: relative;
       z-index: 2;
       opacity: 0;
-      animation: fadeInImproved 0.6s ease-out 0.3s forwards;
+      animation: fadeIn 0.6s ease-out 0.3s forwards;
     }
 
     header p {
@@ -114,7 +135,7 @@
       letter-spacing: 2px;
       color: #ffcc00;
       opacity: 0;
-      animation: fadeInDownImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 0.5s forwards;
+      animation: fadeInDown 0.6s cubic-bezier(0.33, 1, 0.68, 1) 0.5s forwards;
     }
 
     header h1 {
@@ -129,7 +150,7 @@
       color: transparent;
       text-shadow: 0 5px 15px rgba(0,0,0,0.3);
       opacity: 0;
-      animation: fadeInUpImproved 0.7s cubic-bezier(0.33, 1, 0.68, 1) 0.8s forwards;
+      animation: fadeInUp 0.7s cubic-bezier(0.33, 1, 0.68, 1) 0.8s forwards;
     }
 
     nav.socials {
@@ -162,13 +183,13 @@
     }
 
     nav.socials a:nth-child(1) { 
-      animation: slideInLeftImproved 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.2s forwards; 
+      animation: slideInLeft 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.2s forwards; 
     }
     nav.socials a:nth-child(2) { 
-      animation: slideInLeftImproved 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.4s forwards; 
+      animation: slideInLeft 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.4s forwards; 
     }
     nav.socials a:nth-child(3) { 
-      animation: slideInLeftImproved 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.6s forwards; 
+      animation: slideInLeft 0.5s cubic-bezier(0.33, 1, 0.68, 1) 1.6s forwards; 
     }
 
     nav.socials a::before {
@@ -213,15 +234,8 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       cursor: default;
-      /* Sections visibles par défaut, sans animation */
       opacity: 1;
       transform: translateY(0);
-    }
-
-    /* --- Animations supprimées pour .about et .requests --- */
-    /* Les sections sont maintenant visibles dès le départ */
-    .about, .requests {
-      /* Pas d'animation ici */
     }
 
     section:hover {
@@ -240,6 +254,7 @@
       display: inline-block;
       padding-bottom: 15px;
       letter-spacing: 1px;
+      animation: glow 3s infinite alternate;
     }
 
     section h2::after {
@@ -285,7 +300,7 @@
       transform: scale(1.08) rotate(3deg);
       border-color: #ffcc00;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      animation: floatImproved 3s ease-in-out infinite;
+      animation: float 3s ease-in-out infinite;
     }
 
     .about-text {
@@ -339,7 +354,7 @@
       margin-top: 60px;
       opacity: 0;
       transform: translateY(30px);
-      animation: fadeInUpImproved 0.6s cubic-bezier(0.33, 1, 0.68, 1) 2.7s forwards;
+      animation: fadeInUp 0.6s cubic-bezier(0.33, 1, 0.68, 1) 2.7s forwards;
       border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -436,7 +451,7 @@
           this.classList.add('loaded');
           
           if (this.classList.contains('about-img')) {
-            this.style.animation = 'floatImproved 3s ease-in-out infinite';
+            this.style.animation = 'float 3s ease-in-out infinite';
           }
         };
       });
