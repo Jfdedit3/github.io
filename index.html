@@ -284,7 +284,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* --- Animation uniquement sur mobile --- */
+    /* --- Animation à chaque fois sur mobile --- */
     @media (max-width: 768px) {
       .about {
         opacity: 0;
@@ -578,7 +578,7 @@
         };
       });
 
-      // --- Scroll Animation pour Mobile ---
+      // --- Scroll Animation à chaque passage sur Mobile ---
       const isMobile = window.matchMedia("(max-width: 768px)").matches;
       
       if (isMobile) {
@@ -594,8 +594,11 @@
         const observerCallback = (entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
+              // Toujours réinitialiser et réappliquer l'animation
+              entry.target.classList.remove('animate-on-scroll');
+              // Forcer un reflow pour redémarrer l'animation
+              void entry.target.offsetWidth;
               entry.target.classList.add('animate-on-scroll');
-              observer.unobserve(entry.target); // Arrêter d'observer une fois animé
             }
           });
         };
