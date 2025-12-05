@@ -2,13 +2,13 @@
 workspace.FallenPartsDestroyHeight = -math.huge
 
 local Window = Library:MakeWindow({
-    Title = "Diablo Hub | Brookhaven RP ",
-    SubTitle = "by: Diablo",
-    LoadText = "Carregando Diablo hub",
+    Title = "Mada Hub | Brookhaven RP ",
+    SubTitle = "by: Mada(z4trox)",
+    LoadText = "Loading Mada hub",
     Flags = "Diavoloooo_Broookhaven"
 })
 Window:AddMinimizeButton({
-    Button = { Image = "rbxassetid://11351620343", BackgroundTransparency = 0 },
+    Button = { Image = "rbxassetid://77855434347030", BackgroundTransparency = 0 },
     Corner = { CornerRadius = UDim.new(35, 1) },
 })
 
@@ -9171,4 +9171,5 @@ ToolsTab:AddButton({
                 end
     end
 })
+
 
